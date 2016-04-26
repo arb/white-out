@@ -1,0 +1,33 @@
+{
+  "name": "white-out",
+  "version": "0.0.1",
+  "description": "Transform stream to censor object data.",
+  "main": "index.js",
+  "scripts": {
+    "test": "belly-button && lab -v -a code -c"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/continuationlabs/white-out"
+  },
+  "keywords": [
+    "transform",
+    "stream",
+    "censor",
+    "good"
+  ],
+  "author": "Continuation Labs <contact@continuation.io> (http://continuation.io/)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/continuationlabs/white-out/issues"
+  },
+  "homepage": "https://github.com/continuationlabs/white-out",
+  "devDependencies": {
+    "belly-button": "2.x.x",
+    "code": "2.x.x",
+    "lab": "10.x.x"
+  },
+  "dependencies": {
+    "traverse": "^0.6.6"
+  }
+}
