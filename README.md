@@ -45,7 +45,6 @@ wo.write({
 
 ```js
 const wo = new WhiteOut({ ssn: 'remove', age: 'censor' });
-const out = writeStream();
 
 wo.write([{
   name: 'Moe',
