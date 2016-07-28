@@ -2,6 +2,7 @@
 
 const Stream = require('stream');
 const Traverse = require('traverse');
+const Reach = require('reach');
 
 const grab = (obj, key) => {
   if (obj.hasOwnProperty(key)) {
@@ -13,7 +14,7 @@ const replacer = (match, group) => {
 };
 
 class WhiteOut extends Stream.Transform {
-  constructor (rules, options) {
+  constructor (rules, root, options) {
     super(Object.assign({}, options, { objectMode: true }));
 
     // Shallow copy the filter rules
@@ -26,10 +27,13 @@ class WhiteOut extends Stream.Transform {
       }
     });
     this._rules = _rules;
+    this._root = root;
   }
   _transform (data, enc, next) {
     const filterRules = this._rules;
-    Traverse(data).forEach(function (value) {
+    const source = this._root ? Reach(data, this._root) : data;
+
+    Traverse(source).forEach(function (value) {
       if (this.isRoot) {
         return;
       }

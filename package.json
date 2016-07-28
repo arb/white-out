@@ -28,6 +28,7 @@
     "lab": "10.x.x"
   },
   "dependencies": {
-    "traverse": "^0.6.6"
+    "reach": "^1.x.x",
+    "traverse": "0.6.6"
   }
 }

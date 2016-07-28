@@ -272,4 +272,77 @@ describe('white-out', () => {
       wo.end();
     });
   });
+
+  describe('root option', () => {
+    it('traverses starting at the root when specified', (done) => {
+      const wo = new WhiteOut({ password: 'remove', name: 'censor' }, 'foo');
+      const out = writeStream();
+
+      wo.pipe(out);
+
+      wo.on('end', () => {
+        const item = out.data[0];
+        expect(item).to.deep.equal({
+          name: 'John Smith',
+          values: [1, 2, 3],
+          password: 'hunter1',
+          foo: {
+            name: 'XXXXXXXXXX'
+          }
+        });
+        done();
+      });
+
+      wo.write({
+        name: 'John Smith',
+        values: [1, 2, 3],
+        password: 'hunter1',
+        foo: {
+          password: 'hunter1',
+          name: 'John Smith'
+        }
+      });
+      wo.end();
+    });
+
+    it('safely handles unknown root values', (done) => {
+      const wo = new WhiteOut({ password: 'remove' }, 'bar');
+      const out = writeStream();
+
+      wo.pipe(out);
+
+      wo.on('end', () => {
+        const item = out.data[0];
+        expect(item).to.deep.equal({
+          name: 'John Smith'
+        });
+        done();
+      });
+
+      wo.write({
+        name: 'John Smith'
+      });
+      wo.end();
+    });
+
+    it('safely handles root being a non-object', (done) => {
+      const wo = new WhiteOut({ password: 'remove' }, 'name');
+      const out = writeStream();
+
+      wo.pipe(out);
+
+      wo.on('end', () => {
+        const item = out.data[0];
+        expect(item).to.deep.equal({
+          name: 'John Smith'
+        });
+        done();
+      });
+
+      wo.write({
+        name: 'John Smith'
+      });
+      wo.end();
+    });
+  });
 });

@@ -7,7 +7,7 @@
 
 A transform stream used to censor data from objects before passing them down the pipeline.
 
-## `new WhiteOut (filter, [options])`
+## `new WhiteOut (filter, [root], [options])`
 
 Creates a new `WhiteOut` transform stream with the following arguments.
 - `filter` - a key value pair where `key` is the property value to censor on the object payload and the `value` is the censor type.
@@ -15,6 +15,7 @@ Creates a new `WhiteOut` transform stream with the following arguments.
     - "censor" - replaces the value with a string of "X"s.
     - "remove" - completely removes the key from object
     - Anything else will be treated as a `RegExp` definition and will be passed into `new RegExp`.
+- `[root]` - an object string path that will be used when the censor algorithm starts. Useful for censoring only a subsection of the entire `data` object. Defaults to `undefined` which means the entire `data` object will be traversed. For performance reasons, it is recodmended to set `root` to only the specific segment of `data` you wish to filter.
 - `[options]` - additional options to pass into the transform stream constructor. `objectMode` is always `true`.
 
 ## Examples
@@ -36,6 +37,31 @@ wo.write({
   name: 'John Smith',
   age: 55,
   values: [1,2,3],
+  foo: {
+    value: 10
+  }
+}
+*/
+```
+
+```js
+const wo = new WhiteOut({ password: 'remove', 'foo' });
+wo.write({
+  name: 'John Smith',
+  age: 55,
+  values: [1,2,3],
+  password: 'hunter1',
+  foo: {
+    password: 'hunter1',
+    value: 10
+  }
+});
+/* results in
+{
+  name: 'John Smith',
+  age: 55,
+  values: [1,2,3],
+  password: 'hunter1',
   foo: {
     value: 10
   }
