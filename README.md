@@ -15,7 +15,7 @@ Creates a new `WhiteOut` transform stream with the following arguments.
     - "censor" - replaces the value with a string of "X"s.
     - "remove" - completely removes the key from object
     - Anything else will be treated as a `RegExp` definition and will be passed into `new RegExp`.
-- `[options]` - additional options to pass into the transform stream constructor. `objectMode` is always `true`.
+- `[options]` - Additional constructor options. Defaults to `{}`.
   - `[root]` - an object string path (ex `'response.payload'`) that will be used when the censor algorithm starts. Useful for censoring only a subsection of the entire `data` object. Defaults to `undefined` which means the entire `data` object will be traversed. For performance reasons, it is recodmended to set `root` to only the specific segment of `data` you wish to filter.
   - `[stream]` - additional options to pass into the transform stream constructor. `objectMode` is always `true`.
 
