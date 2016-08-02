@@ -23,11 +23,12 @@
   },
   "homepage": "https://github.com/continuationlabs/white-out",
   "devDependencies": {
-    "belly-button": "2.x.x",
-    "code": "2.x.x",
+    "belly-button": "3.x.x",
+    "code": "3.x.x",
     "lab": "10.x.x"
   },
   "dependencies": {
-    "traverse": "^0.6.6"
+    "reach": "1.x.x",
+    "traverse": "0.6.6"
   }
 }

@@ -1,5 +1,7 @@
 'use strict';
 
+const Assert = require('assert');
+const Reach = require('reach');
 const Stream = require('stream');
 const Traverse = require('traverse');
 
@@ -14,7 +16,10 @@ const replacer = (match, group) => {
 
 class WhiteOut extends Stream.Transform {
   constructor (rules, options) {
-    super(Object.assign({}, options, { objectMode: true }));
+    options = options || {};
+    Assert.ok(options.root === undefined || typeof options.root === 'string', 'root must be a string');
+
+    super(Object.assign({}, options.stream, { objectMode: true }));
 
     // Shallow copy the filter rules
     const _rules = Object.assign({}, rules);
@@ -25,11 +30,15 @@ class WhiteOut extends Stream.Transform {
         _rules[key] = new RegExp(value);
       }
     });
+
     this._rules = _rules;
+    this._root = options.root;
   }
   _transform (data, enc, next) {
     const filterRules = this._rules;
-    Traverse(data).forEach(function (value) {
+    const source = this._root ? Reach(data, this._root) : data;
+
+    Traverse(source).forEach(function (value) {
       if (this.isRoot) {
         return;
       }

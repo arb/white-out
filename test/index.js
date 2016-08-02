@@ -23,6 +23,11 @@ const writeStream = () => {
 };
 
 describe('white-out', () => {
+  it('throws an error if "root" is not a string', (done) => {
+    expect(() => { return new WhiteOut({}, { root: [] }); }).to.throw('root must be a string');
+    done();
+  });
+
   describe('"remove" option', () => {
     it('removes keys from objects', (done) => {
       const wo = new WhiteOut({ password: 'remove' });
@@ -32,7 +37,7 @@ describe('white-out', () => {
 
       wo.on('end', () => {
         const item = out.data[0];
-        expect(item).to.deep.equal({
+        expect(item).to.equal({
           name: 'John Smith',
           age: 55,
           values: [1, 2, 3],
@@ -64,7 +69,7 @@ describe('white-out', () => {
 
       wo.on('end', () => {
         const item = out.data[0];
-        expect(item).to.deep.equal({});
+        expect(item).to.equal({});
         done();
       });
 
@@ -80,7 +85,7 @@ describe('white-out', () => {
 
       wo.on('end', () => {
         const item = out.data[0];
-        expect(item).to.deep.equal([{ name: 'Moe' }, { name: 'Larry' }, { name: 'Shemp' }]);
+        expect(item).to.equal([{ name: 'Moe' }, { name: 'Larry' }, { name: 'Shemp' }]);
         done();
       });
 
@@ -110,7 +115,7 @@ describe('white-out', () => {
 
       wo.on('end', () => {
         const item = out.data[0];
-        expect(item).to.deep.equal({
+        expect(item).to.equal({
           name: 'John Smith',
           age: 55,
           values: [1, 2, 3],
@@ -144,7 +149,7 @@ describe('white-out', () => {
 
       wo.on('end', () => {
         const item = out.data[0];
-        expect(item).to.deep.equal({
+        expect(item).to.equal({
           values: 'XXXXX' // 5 because [1,2,3] becomes '1,2,3'
         });
         done();
@@ -162,7 +167,7 @@ describe('white-out', () => {
 
       wo.on('end', () => {
         const item = out.data[0];
-        expect(item).to.deep.equal([{
+        expect(item).to.equal([{
           name: 'Moe',
           age: 44,
           ssn: 'XXX'
@@ -204,7 +209,7 @@ describe('white-out', () => {
 
       wo.on('end', () => {
         const item = out.data[0];
-        expect(item).to.deep.equal({
+        expect(item).to.equal({
           name: 'John Smith',
           age: 55,
           values: [1, 2, 3],
@@ -242,7 +247,7 @@ describe('white-out', () => {
 
       wo.on('end', () => {
         const item = out.data[0];
-        expect(item).to.deep.equal({
+        expect(item).to.equal({
           values: [{
             name: 'Moe',
             password: 'XXXsword1'
@@ -268,6 +273,79 @@ describe('white-out', () => {
           name: 'Shemp',
           password: 'password3'
         }]
+      });
+      wo.end();
+    });
+  });
+
+  describe('root option', () => {
+    it('traverses starting at the root when specified', (done) => {
+      const wo = new WhiteOut({ password: 'remove', name: 'censor' }, { root: 'foo' });
+      const out = writeStream();
+
+      wo.pipe(out);
+
+      wo.on('end', () => {
+        const item = out.data[0];
+        expect(item).to.equal({
+          name: 'John Smith',
+          values: [1, 2, 3],
+          password: 'hunter1',
+          foo: {
+            name: 'XXXXXXXXXX'
+          }
+        });
+        done();
+      });
+
+      wo.write({
+        name: 'John Smith',
+        values: [1, 2, 3],
+        password: 'hunter1',
+        foo: {
+          password: 'hunter1',
+          name: 'John Smith'
+        }
+      });
+      wo.end();
+    });
+
+    it('safely handles unknown root values', (done) => {
+      const wo = new WhiteOut({ password: 'remove' }, { root: 'bar' });
+      const out = writeStream();
+
+      wo.pipe(out);
+
+      wo.on('end', () => {
+        const item = out.data[0];
+        expect(item).to.equal({
+          name: 'John Smith'
+        });
+        done();
+      });
+
+      wo.write({
+        name: 'John Smith'
+      });
+      wo.end();
+    });
+
+    it('safely handles root being a non-object', (done) => {
+      const wo = new WhiteOut({ password: 'remove' }, { root: 'name' });
+      const out = writeStream();
+
+      wo.pipe(out);
+
+      wo.on('end', () => {
+        const item = out.data[0];
+        expect(item).to.equal({
+          name: 'John Smith'
+        });
+        done();
+      });
+
+      wo.write({
+        name: 'John Smith'
       });
       wo.end();
     });
