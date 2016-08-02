@@ -1,6 +1,6 @@
 {
   "name": "white-out",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Transform stream to censor object data.",
   "main": "index.js",
   "scripts": {
