@@ -46,7 +46,7 @@ wo.write({
 ```
 
 ```js
-const wo = new WhiteOut({ password: 'remove', 'foo' });
+const wo = new WhiteOut({ password: 'remove', { root: 'foo' } });
 wo.write({
   name: 'John Smith',
   age: 55,
