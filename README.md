@@ -2,8 +2,8 @@
 
 [![Current Version](https://img.shields.io/npm/v/white-out.svg)](https://www.npmjs.org/package/white-out)
 [![Travis CI](https://travis-ci.org/continuationlabs/white-out.svg?branch=master)](https://travis-ci.org/continuationlabs/white-out)
+[![belly-button-style](https://img.shields.io/badge/eslint-bellybutton-4B32C3.svg)](https://github.com/continuationlabs/belly-button)
 
-[![belly-button-style](https://cdn.rawgit.com/continuationlabs/belly-button/master/badge.svg)](https://github.com/continuationlabs/belly-button)
 
 A transform stream used to censor data from objects before passing them down the pipeline.
 
