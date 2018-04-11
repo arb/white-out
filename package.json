@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/continuationlabs/white-out"
+    "url": "https://github.com/arb/white-out"
   },
   "keywords": [
     "transform",
@@ -16,12 +16,12 @@
     "censor",
     "good"
   ],
-  "author": "Continuation Labs <contact@continuation.io> (http://continuation.io/)",
+  "author": "Adam Bretz <arbretz@gmail.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/continuationlabs/white-out/issues"
+    "url": "https://github.com/arb/white-out/issues"
   },
-  "homepage": "https://github.com/continuationlabs/white-out",
+  "homepage": "https://github.com/arb/white-out",
   "devDependencies": {
     "belly-button": "4.x.x",
     "code": "4.x.x",
