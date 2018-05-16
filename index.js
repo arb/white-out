@@ -13,8 +13,10 @@ class WhiteOut extends Stream.Transform {
   constructor (rules, options) {
     options = options || {};
     Assert.ok(options.root === undefined || typeof options.root === 'string', 'root must be a string');
+    Assert.ok(options.censorText === undefined || typeof options.censorText === 'string', 'censorText must be a string');
 
     super(Object.assign({}, options.stream, { objectMode: true }));
+    this.censorText = options.censorText;
     this._rules = new Map();
 
     Object.keys(rules).forEach((key) => {
@@ -32,6 +34,7 @@ class WhiteOut extends Stream.Transform {
   _transform (data, enc, next) {
     const rules = this._rules;
     const source = this._root ? Reach(data, this._root) : data;
+    const censorText = this.censorText
 
     Traverse(source).forEach(function (value) {
       if (this.isRoot) {
@@ -42,7 +45,7 @@ class WhiteOut extends Stream.Transform {
 
       if (filter) {
         if (filter === 'censor') {
-          this.update(('' + value).replace(/./g, 'X'));
+          this.update(censorText || ('' + value).replace(/./g, 'X'));
         } else if (filter === 'remove') {
           this.delete();
         } else {

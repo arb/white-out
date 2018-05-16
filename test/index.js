@@ -28,6 +28,11 @@ describe('white-out', () => {
     done();
   });
 
+  it('throws an error if "censorText" is not a string', (done) => {
+    expect(() => { return new WhiteOut({}, { censorText: [] }); }).to.throw('censorText must be a string');
+    done();
+  });
+
   describe('"remove" option', () => {
     it('removes keys from objects', (done) => {
       const wo = new WhiteOut({ password: 'remove' });
@@ -346,6 +351,42 @@ describe('white-out', () => {
 
       wo.write({
         name: 'John Smith'
+      });
+      wo.end();
+    });
+  });
+
+  describe('censorText option', () => {
+    it('censors keys by provided censorText', (done) => {
+      const wo = new WhiteOut({ password: 'censor' }, { censorText: '******redacted******' });
+      const out = writeStream();
+
+      wo.pipe(out);
+
+      wo.on('end', () => {
+        const item = out.data[0];
+        expect(item).to.equal({
+          name: 'John Smith',
+          age: 55,
+          values: [1, 2, 3],
+          password: '******redacted******',
+          foo: {
+            value: 10,
+            password: '******redacted******'
+          }
+        });
+        done();
+      });
+
+      wo.write({
+        name: 'John Smith',
+        age: 55,
+        values: [1, 2, 3],
+        password: 'hunter1',
+        foo: {
+          password: 'hunter1',
+          value: 10
+        }
       });
       wo.end();
     });
