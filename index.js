@@ -34,7 +34,7 @@ class WhiteOut extends Stream.Transform {
   _transform (data, enc, next) {
     const rules = this._rules;
     const source = this._root ? Reach(data, this._root) : data;
-    const censorText = this.censorText
+    const censorText = this.censorText;
 
     Traverse(source).forEach(function (value) {
       if (this.isRoot) {
