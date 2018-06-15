@@ -24,8 +24,8 @@
   "homepage": "https://github.com/arb/white-out",
   "devDependencies": {
     "belly-button": "4.x.x",
-    "code": "4.x.x",
-    "lab": "14.x.x"
+    "code": "5.x.x",
+    "lab": "15.x.x"
   },
   "dependencies": {
     "reach": "1.x.x",

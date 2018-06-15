@@ -23,18 +23,16 @@ const writeStream = () => {
 };
 
 describe('white-out', () => {
-  it('throws an error if "root" is not a string', (done) => {
+  it('throws an error if "root" is not a string', () => {
     expect(() => { return new WhiteOut({}, { root: [] }); }).to.throw('root must be a string');
-    done();
   });
 
-  it('throws an error if "censorText" is not a string', (done) => {
+  it('throws an error if "censorText" is not a string', () => {
     expect(() => { return new WhiteOut({}, { censorText: [] }); }).to.throw('censorText must be a string');
-    done();
   });
 
   describe('"remove" option', () => {
-    it('removes keys from objects', (done) => {
+    it('removes keys from objects', () => {
       const wo = new WhiteOut({ password: 'remove' });
       const out = writeStream();
 
@@ -50,7 +48,6 @@ describe('white-out', () => {
             value: 10
           }
         });
-        done();
       });
 
       wo.write({
@@ -66,7 +63,7 @@ describe('white-out', () => {
       wo.end();
     });
 
-    it('removes keys that are arrays', (done) => {
+    it('removes keys that are arrays', () => {
       const wo = new WhiteOut({ values: 'remove' });
       const out = writeStream();
 
@@ -75,14 +72,13 @@ describe('white-out', () => {
       wo.on('end', () => {
         const item = out.data[0];
         expect(item).to.equal({});
-        done();
       });
 
       wo.write({ values: [1, 2, 3] });
       wo.end();
     });
 
-    it('removes keys from a collection', (done) => {
+    it('removes keys from a collection', () => {
       const wo = new WhiteOut({ ssn: 'remove', age: 'remove' });
       const out = writeStream();
 
@@ -91,7 +87,6 @@ describe('white-out', () => {
       wo.on('end', () => {
         const item = out.data[0];
         expect(item).to.equal([{ name: 'Moe' }, { name: 'Larry' }, { name: 'Shemp' }]);
-        done();
       });
 
       wo.write([{
@@ -112,7 +107,7 @@ describe('white-out', () => {
   });
 
   describe('"censor" option', () => {
-    it('censors keys from objects', (done) => {
+    it('censors keys from objects', () => {
       const wo = new WhiteOut({ password: 'censor' });
       const out = writeStream();
 
@@ -130,7 +125,6 @@ describe('white-out', () => {
             password: 'XXXXXXX'
           }
         });
-        done();
       });
 
       wo.write({
@@ -146,7 +140,7 @@ describe('white-out', () => {
       wo.end();
     });
 
-    it('censors keys that are arrays', (done) => {
+    it('censors keys that are arrays', () => {
       const wo = new WhiteOut({ values: 'censor' });
       const out = writeStream();
 
@@ -157,14 +151,13 @@ describe('white-out', () => {
         expect(item).to.equal({
           values: 'XXXXX' // 5 because [1,2,3] becomes '1,2,3'
         });
-        done();
       });
 
       wo.write({ values: [1, 2, 3] });
       wo.end();
     });
 
-    it('censors keys from a collection', (done) => {
+    it('censors keys from a collection', () => {
       const wo = new WhiteOut({ ssn: 'censor' });
       const out = writeStream();
 
@@ -185,7 +178,6 @@ describe('white-out', () => {
           age: 38,
           ssn: 'XXXX'
         }]);
-        done();
       });
 
       wo.write([{
@@ -206,7 +198,7 @@ describe('white-out', () => {
   });
 
   describe('RegExp option', () => {
-    it('mutates matching keys according to the RegExp', (done) => {
+    it('mutates matching keys according to the RegExp', () => {
       const wo = new WhiteOut({ password: '^.{3}', ssn: /9/g });
       const out = writeStream();
 
@@ -226,7 +218,6 @@ describe('white-out', () => {
             ssn: 'XX23X8110X80'
           }
         });
-        done();
       });
 
       wo.write({
@@ -244,7 +235,7 @@ describe('white-out', () => {
       wo.end();
     });
 
-    it('mutates matching keys in the collection according to the RegExp', (done) => {
+    it('mutates matching keys in the collection according to the RegExp', () => {
       const wo = new WhiteOut({ password: '^.{3}' });
       const out = writeStream();
 
@@ -264,7 +255,6 @@ describe('white-out', () => {
             password: 'XXXsword3'
           }]
         });
-        done();
       });
 
       wo.write({
@@ -284,7 +274,7 @@ describe('white-out', () => {
   });
 
   describe('root option', () => {
-    it('traverses starting at the root when specified', (done) => {
+    it('traverses starting at the root when specified', () => {
       const wo = new WhiteOut({ password: 'remove', name: 'censor' }, { root: 'foo' });
       const out = writeStream();
 
@@ -300,7 +290,6 @@ describe('white-out', () => {
             name: 'XXXXXXXXXX'
           }
         });
-        done();
       });
 
       wo.write({
@@ -315,7 +304,7 @@ describe('white-out', () => {
       wo.end();
     });
 
-    it('safely handles unknown root values', (done) => {
+    it('safely handles unknown root values', () => {
       const wo = new WhiteOut({ password: 'remove' }, { root: 'bar' });
       const out = writeStream();
 
@@ -326,7 +315,6 @@ describe('white-out', () => {
         expect(item).to.equal({
           name: 'John Smith'
         });
-        done();
       });
 
       wo.write({
@@ -335,7 +323,7 @@ describe('white-out', () => {
       wo.end();
     });
 
-    it('safely handles root being a non-object', (done) => {
+    it('safely handles root being a non-object', () => {
       const wo = new WhiteOut({ password: 'remove' }, { root: 'name' });
       const out = writeStream();
 
@@ -346,7 +334,6 @@ describe('white-out', () => {
         expect(item).to.equal({
           name: 'John Smith'
         });
-        done();
       });
 
       wo.write({
@@ -357,7 +344,7 @@ describe('white-out', () => {
   });
 
   describe('censorText option', () => {
-    it('censors keys by provided censorText', (done) => {
+    it('censors keys by provided censorText', () => {
       const wo = new WhiteOut({ password: 'censor' }, { censorText: '******redacted******' });
       const out = writeStream();
 
@@ -375,7 +362,6 @@ describe('white-out', () => {
             password: '******redacted******'
           }
         });
-        done();
       });
 
       wo.write({
