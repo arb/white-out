@@ -6,6 +6,8 @@
 
 A transform stream used to censor data from objects before passing them down the pipeline.
 
+**white-out 2.x mutates the target object passed, which may lead to undesirable results such as keys being undefined, changed, etc.**
+
 ## `new WhiteOut (filter, [options])`
 
 Creates a new `WhiteOut` transform stream with the following arguments.
