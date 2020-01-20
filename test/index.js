@@ -350,4 +350,42 @@ describe('white-out', () => {
       wo.end();
     });
   });
+
+  describe('immutable option', () => {
+    it('does not mutate source object', (done) => {
+      const wo = new WhiteOut({ password: 'censor' }, { immutable: true });
+      const out = writeStream();
+      const source = {
+        name: 'John Smith',
+        age: 55,
+        values: [1, 2, 3],
+        password: 'hunter1',
+        foo: {
+          password: 'hunter1',
+          value: 10
+        }
+      };
+
+      wo.pipe(out);
+
+      wo.on('end', () => {
+        const item = out.data[0];
+        expect(item).to.equal({
+          name: 'John Smith',
+          age: 55,
+          values: [1, 2, 3],
+          password: 'XXXXXXX',
+          foo: {
+            value: 10,
+            password: 'XXXXXXX'
+          }
+        });
+        expect(source).to.not.be.equal(item);
+        done();
+      });
+
+      wo.write(source);
+      wo.end();
+    });
+  });
 });

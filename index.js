@@ -16,6 +16,7 @@ class WhiteOut extends Stream.Transform {
 
     super(Object.assign({}, options.stream, { objectMode: true }));
     this._rules = new Map();
+    this._immutable = options.immutable || false;
 
     Object.keys(rules).forEach((key) => {
       const value = rules[key];
@@ -29,8 +30,9 @@ class WhiteOut extends Stream.Transform {
 
     this._root = options.root;
   }
-  _transform (data, enc, next) {
+  _transform (sourceData, enc, next) {
     const rules = this._rules;
+    const data = this._immutable ? Traverse(sourceData).clone() : sourceData;
     const source = this._root ? Reach(data, this._root) : data;
 
     Traverse(source).forEach(function (value) {
