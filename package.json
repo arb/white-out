@@ -4,7 +4,7 @@
   "description": "Transform stream to censor object data.",
   "main": "index.js",
   "scripts": {
-    "test": "belly-button && lab -v -a code -c"
+    "test": "belly-button && lab -v -a code -c -l"
   },
   "repository": {
     "type": "git",

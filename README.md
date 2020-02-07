@@ -6,7 +6,7 @@
 
 A transform stream used to censor data from objects before passing them down the pipeline.
 
-**white-out 2.x mutates the target object passed, which may lead to undesirable results such as keys being undefined, changed, etc.**
+**white-out 2.x mutates the target object passed (unless immutable option is enabled), which may lead to undesirable results such as keys being undefined, changed, etc.**
 
 ## `new WhiteOut (filter, [options])`
 
@@ -19,6 +19,7 @@ Creates a new `WhiteOut` transform stream with the following arguments.
 - `[options]` - Additional constructor options. Defaults to `{}`.
   - `[root]` - an object string path (ex `'response.payload'`) that will be used when the censor algorithm starts. Useful for censoring only a subsection of the entire `data` object. Defaults to `undefined` which means the entire `data` object will be traversed. For performance reasons, it is recodmended to set `root` to only the specific segment of `data` you wish to filter.
   - `[stream]` - additional options to pass into the transform stream constructor. `objectMode` is always `true`.
+  - `[immutable]` - change processing mode to immutable, so source object want be modified. Default to false.
 
 ## Examples
 
